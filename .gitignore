@@ -1,13 +1,16 @@
 # Java / Spring Boot
 target/
+build/
 *.class
 *.jar
 *.war
 *.ear
 *.log
-.mvn/
-!.mvn/wrapper/maven-wrapper.jar
-!.mvn/wrapper/maven-wrapper.properties
+
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
 # Next.js
 .next/
