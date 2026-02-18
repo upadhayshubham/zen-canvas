@@ -76,3 +76,22 @@ export interface PageResponse<T> {
   number: number;
   size: number;
 }
+
+export interface CartItemResponse {
+  id: string;
+  variantId: string;
+  sku: string;
+  productName: string;
+  productSlug: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+  imageUrl?: string;
+  attributes: Record<string, string>;
+}
+
+export interface CartResponse {
+  items: CartItemResponse[];
+  totalItems: number;
+  totalPrice: number;
+}
