@@ -1,6 +1,7 @@
 package com.zencanvas.api.domain.repository;
 
 import com.zencanvas.api.domain.entity.Order;
+import com.zencanvas.api.domain.entity.Order.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findByPaymentIntentId(String paymentIntentId);
 
     boolean existsByPaymentIntentId(String paymentIntentId);
+
+    Page<Order> findByStatus(OrderStatus status, Pageable pageable);
 }
