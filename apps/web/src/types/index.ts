@@ -95,3 +95,18 @@ export interface CartResponse {
   totalItems: number;
   totalPrice: number;
 }
+
+export interface AuthResponse {
+  token: string;
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+}
+
+export interface PaymentIntentResponse {
+  clientSecret: string;
+  paymentIntentId: string;
+  amount: number;
+}
