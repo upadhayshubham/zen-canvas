@@ -30,7 +30,7 @@ export default function CheckoutPage() {
       const result = await createPaymentIntent(getSessionId(), form);
       localStorage.setItem('zc_client_secret', result.clientSecret);
       localStorage.setItem('zc_payment_intent', result.paymentIntentId);
-      router.push('/checkout/payment');
+      router.push('/checkout/confirmation');
     } catch {
       setError('Failed to create order. Make sure your cart is not empty.');
     } finally {

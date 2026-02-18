@@ -1,8 +1,19 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import ProductGrid from '@/components/ProductGrid';
 import { Sparkles } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Mandala Art Prints & Wall Art',
+  description: 'Shop handcrafted mandala art prints, wall art, posters and gift sets. Each piece is a meditation in sacred geometry and colour.',
+  openGraph: {
+    title: 'Zen Canvas — Mandala Art Shop',
+    description: 'Shop handcrafted mandala art prints, wall art, posters and gift sets.',
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
   return (
