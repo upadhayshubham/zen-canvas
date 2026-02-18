@@ -1,12 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
+  --background: #fdf6ff;
+  --foreground: #2d1b4e;
+  --primary: #7c3aed;
+  --primary-dark: #5b21b6;
+  --primary-light: #ede9fe;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --rose: #e11d48;
+  --teal: #0d9488;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--background);
+  background: linear-gradient(135deg, #fdf6ff 0%, #f5f0ff 50%, #fdf2f8 100%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Mandala pattern subtle background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(13, 148, 136, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
 }
