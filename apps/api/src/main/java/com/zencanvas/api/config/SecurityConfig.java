@@ -23,6 +23,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/health", "/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                .requestMatchers("/cart/**").permitAll()
+                .requestMatchers("/checkout/**").permitAll()
+                .requestMatchers("/webhooks/**").permitAll()
                 .anyRequest().authenticated()
             );
         return http.build();
