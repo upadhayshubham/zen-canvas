@@ -45,6 +45,11 @@ export default function LoginPage() {
               className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300" />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs text-purple-500 hover:text-purple-700">
+              Forgot password?
+            </Link>
+          </div>
           <button type="submit" disabled={loading}
             className="w-full bg-stone-900 text-white py-3 rounded-xl font-semibold hover:bg-stone-700 transition-colors disabled:opacity-50 mt-2">
             {loading ? 'Signing in...' : 'Sign In'}

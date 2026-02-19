@@ -15,3 +15,11 @@ export async function register(data: {
   const res = await api.post<AuthResponse>('/auth/register', data);
   return res.data;
 }
+
+export async function forgotPassword(email: string): Promise<void> {
+  await api.post('/auth/forgot-password', { email });
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<void> {
+  await api.post('/auth/reset-password', { token, newPassword });
+}
