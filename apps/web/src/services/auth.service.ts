@@ -1,8 +1,13 @@
 import api from '@/lib/api';
 import { AuthResponse } from '@/types';
+import { getSessionId } from '@/lib/session';
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
-  const res = await api.post<AuthResponse>('/auth/login', { email, password });
+  const res = await api.post<AuthResponse>(
+    '/auth/login',
+    { email, password },
+    { headers: { 'X-Session-Id': getSessionId() } }
+  );
   return res.data;
 }
 

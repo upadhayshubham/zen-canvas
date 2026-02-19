@@ -18,6 +18,9 @@ export default function LoginPage() {
     try {
       const res = await login(email, password);
       localStorage.setItem('zc_token', res.token);
+      // Session cart has been merged server-side — clear the local session ID
+      // so the user gets a fresh anonymous session for future guest browsing
+      localStorage.removeItem('zc_session');
       router.push('/orders');
     } catch {
       setError('Invalid email or password. Please try again.');

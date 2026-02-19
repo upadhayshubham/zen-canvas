@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -18,6 +20,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final CartService cartService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -38,13 +41,17 @@ public class AuthService {
         return toResponse(saved, token);
     }
 
-    @Transactional(readOnly = true)
-    public AuthResponse login(LoginRequest request) {
+    @Transactional
+    public AuthResponse login(LoginRequest request, String sessionId) {
         var user = userRepository.findByEmail(request.email())
             .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Invalid credentials");
+        }
+
+        if (StringUtils.isNotBlank(sessionId)) {
+            cartService.mergeSessionCart(sessionId, user);
         }
 
         String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name());

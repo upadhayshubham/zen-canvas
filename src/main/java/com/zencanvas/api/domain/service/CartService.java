@@ -4,9 +4,11 @@ import com.zencanvas.api.domain.dto.AddToCartRequest;
 import com.zencanvas.api.domain.dto.CartItemResponse;
 import com.zencanvas.api.domain.dto.CartResponse;
 import com.zencanvas.api.domain.entity.CartItem;
+import com.zencanvas.api.domain.entity.User;
 import com.zencanvas.api.domain.repository.CartItemRepository;
 import com.zencanvas.api.domain.repository.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +74,39 @@ public class CartService {
 
     @Transactional
     public void clearCart(String sessionId) {
+        cartItemRepository.deleteBySessionId(sessionId);
+    }
+
+    /**
+     * Merges a guest session cart into the authenticated user's cart on login.
+     * If both carts have the same variant, quantities are summed.
+     * The session cart is cleared after merge.
+     */
+    @Transactional
+    public void mergeSessionCart(String sessionId, User user) {
+        if (StringUtils.isBlank(sessionId)) return;
+
+        List<CartItem> sessionItems = cartItemRepository.findBySessionId(sessionId);
+        if (sessionItems.isEmpty()) return;
+
+        for (CartItem sessionItem : sessionItems) {
+            cartItemRepository.findByUserIdAndVariantId(user.getId(), sessionItem.getVariant().getId())
+                .ifPresentOrElse(
+                    existing -> {
+                        // Variant already in user's cart — add quantities
+                        existing.setQuantity(existing.getQuantity() + sessionItem.getQuantity());
+                        cartItemRepository.save(existing);
+                    },
+                    () -> {
+                        // New variant — reassign session item to user
+                        sessionItem.setSessionId(null);
+                        sessionItem.setUser(user);
+                        cartItemRepository.save(sessionItem);
+                    }
+                );
+        }
+
+        // Remove any remaining session items (the ones that were merged by quantity)
         cartItemRepository.deleteBySessionId(sessionId);
     }
 }
