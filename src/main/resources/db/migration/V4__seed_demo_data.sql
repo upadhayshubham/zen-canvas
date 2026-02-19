@@ -59,31 +59,31 @@ INSERT INTO products (id, name, slug, description, category_id, published) VALUE
    'A curated set of three A4 mandala prints — Lotus, Ocean and Forest — presented in a kraft gift box with a handwritten card. Perfect for gifting.',
    'a1000000-0000-0000-0000-000000000004', true);
 
--- Product Images (using Unsplash source URLs for mandala/art images)
+-- Product Images (mandala-specific Unsplash photos)
 INSERT INTO product_images (id, product_id, cloudinary_id, secure_url, display_order) VALUES
   ('c1000000-0000-0000-0000-000000000001', 'b1000000-0000-0000-0000-000000000001',
    'demo/lotus-bloom', 'https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000002', 'b1000000-0000-0000-0000-000000000002',
-   'demo/cosmic-spiral', 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80', 0),
+   'demo/cosmic-spiral', 'https://images.unsplash.com/photo-1622737133809-d95047b9e673?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000003', 'b1000000-0000-0000-0000-000000000003',
-   'demo/sun-moon', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80', 0),
+   'demo/sun-moon', 'https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000004', 'b1000000-0000-0000-0000-000000000004',
-   'demo/forest-glow', 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80', 0),
+   'demo/forest-glow', 'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000005', 'b1000000-0000-0000-0000-000000000005',
-   'demo/sacred-rose', 'https://images.unsplash.com/photo-1490750967868-88df5691cc0a?w=800&q=80', 0),
+   'demo/sacred-rose', 'https://images.unsplash.com/photo-1617791160536-598cf32026fb?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000006', 'b1000000-0000-0000-0000-000000000006',
-   'demo/ocean-tide', 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80', 0),
+   'demo/ocean-tide', 'https://images.unsplash.com/photo-1609743522653-52354461eb27?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000007', 'b1000000-0000-0000-0000-000000000007',
-   'demo/fire-chakra', 'https://images.unsplash.com/photo-1552084117-56a987666449?w=800&q=80', 0),
+   'demo/fire-chakra', 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80', 0),
 
   ('c1000000-0000-0000-0000-000000000008', 'b1000000-0000-0000-0000-000000000008',
-   'demo/zen-gift-set', 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80', 0);
+   'demo/zen-gift-set', 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80', 0);
 
 -- Product Variants
 INSERT INTO product_variants (id, product_id, sku, price, stock, attributes) VALUES
