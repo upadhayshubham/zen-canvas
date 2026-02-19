@@ -520,11 +520,12 @@ Frontend available at: `http://localhost:3000`
 
 Triggers on push/PR to `main`.
 
-**Jobs:**
+**Jobs (run in parallel):**
 
 1. `api-build` — Java 25 Temurin, Gradle cache, `./gradlew build -x test`, then `./gradlew test`
+2. `web-build` — Node 20, `npm ci` in `apps/web/`, lint, `next build`
 
-> Note: No frontend CI job yet. Tests require a running PostgreSQL — currently no test containers setup.
+> Note: Spring Boot tests require a running PostgreSQL — no Testcontainers setup yet, so tests are skipped in CI unless the DB is available.
 
 ### Planned Deployment
 
@@ -605,30 +606,45 @@ Chosen because Spring Boot is Ronin's primary backend stack. FastAPI is reserved
 - Colorful Shopify-style UI (purple/violet/fuchsia/amber palette)
 - Seed data: V4 migration with 8 products, Unsplash images, 17 variants
 
+### Phase 4 — SEO, CI, Deployment, Confirmation
+- `generateMetadata` + Open Graph + Twitter cards on all pages
+- Per-route `layout.tsx` with `robots: noindex` for private pages
+- `sitemap.ts` (dynamic — fetches products + categories from API)
+- `robots.ts` (disallows admin/checkout/orders)
+- Frontend CI job (Node 20, npm ci, lint, next build) — runs parallel with api-build
+- `railway.toml` for Spring Boot deployment (nixpacks, healthcheck)
+- `apps/web/vercel.json` for Vercel deployment
+- `apps/web/.env.example` documenting all required env vars
+- `/checkout/confirmation` page — Stripe return_url landing, clears cart, shows order reference
+
+### Phase 5 — Post-auth Features
+- **Password reset flow** — `PasswordResetToken` entity + repository, `PasswordResetService`
+  (generates UUID token, 1hr expiry, logs to console — email wiring is TODO),
+  `PasswordResetController` (`POST /auth/forgot-password`, `POST /auth/reset-password`),
+  `/forgot-password` + `/reset-password?token=` pages, Forgot password link on login
+- **Cart merge on login** — `CartService.mergeSessionCart()` merges guest session into user account
+  on login; quantities summed for duplicate variants; `AuthService.login()` accepts `sessionId`;
+  `AuthController` reads `X-Session-Id` header; frontend clears `zc_session` after login
+- **Demo images** — V5 migration adds 3 extra mandala images per product (32 total, all Unsplash mandala photos)
+
 ---
 
 ## 16. Pending / Roadmap
 
-### Phase 4 — Production Ready
+### To Go Live
+- [ ] Vercel deployment — connect GitHub repo, set env vars (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`)
+- [ ] Railway deployment — set all Spring Boot env vars, attach PostgreSQL plugin
+- [ ] Stripe live keys + register production webhook endpoint at Railway URL
+- [ ] Replace Unsplash demo images with real Cloudinary-hosted product photos
 
-- [ ] Vercel deployment for Next.js (set env vars, custom domain)
-- [ ] Railway deployment for Spring Boot + PostgreSQL
-- [ ] Stripe live keys + production webhook endpoint
-- [ ] Cloudinary real product images (replace Unsplash seeds)
-- [ ] Next.js SEO: `generateMetadata`, Open Graph, sitemap
-
-### Incomplete Features
-
-- [ ] **Stripe payment confirmation page** — `/checkout/payment` page (redirect target after `confirmPayment`) not yet built
-- [ ] **Password reset flow** — `password_reset_tokens` table exists, no service/controller/UI implemented
-- [ ] **Cart merge on login** — link session cart to user after authentication
-- [ ] **Frontend CI** — no GitHub Actions job for Next.js build/lint yet
-- [ ] **Integration tests** — no Testcontainers setup for DB-dependent tests
-
-### Nice to Have
-
-- [ ] Product search with Elasticsearch or pg_trgm
-- [ ] Email notifications (order confirmation) via SendGrid/SES
-- [ ] Cloudinary upload endpoint for admin product image management
-- [ ] Product reviews/ratings
-- [ ] Discount codes / Stripe coupons
+### Features Backlog
+- [ ] **Email notifications** — replace `log.info` in `PasswordResetService` with SendGrid/JavaMailSender; add order confirmation email in `OrderService.handlePaymentSuccess()`
+- [ ] **Product management UI** — admin CRUD for products, variants, images (currently DB-only via migrations)
+- [ ] **Admin dashboard** — revenue stats, orders today, top products, low stock alerts
+- [ ] **Inventory guard** — block add-to-cart when `stock = 0`; decrement stock on order
+- [ ] **Order detail page** — `/orders/[orderId]` with status timeline
+- [ ] **Wishlist** — save products for later (DB for logged-in, localStorage for guests)
+- [ ] **Product reviews & ratings** — post-purchase star rating + text review
+- [ ] **Discount codes** — `POST /cart/apply-coupon`, percentage or fixed amount
+- [ ] **Cloudinary upload** — admin drag-and-drop image upload endpoint
+- [ ] **Integration tests** — Testcontainers setup for DB-dependent Spring Boot tests
